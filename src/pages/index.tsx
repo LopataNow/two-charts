@@ -1,13 +1,14 @@
 import Head from "next/head";
-import { Breadcrumb, Button, Layout } from 'antd';
+import { Breadcrumb, Button, Col, Layout, Row } from 'antd';
 import { Content, Header } from "antd/es/layout/layout";
 import { getCountRollingMean } from "@/services-calls/gov-data";
 import { useQuery } from "@tanstack/react-query";
+import { CountChartCard } from "@/components/countChartCard";
 
 export default function Home() {
   const { data } =  useQuery({
     queryKey: ['countRollingMean'],
-    queryFn: () => getCountRollingMean(),
+    queryFn: () => getCountRollingMean().then((res) => res?.data),
   })
 
   return (
@@ -24,7 +25,14 @@ export default function Home() {
         <Breadcrumb>
           <Breadcrumb.Item>Home</Breadcrumb.Item>
         </Breadcrumb>
-        {data && <div>{JSON.stringify(data)}</div>}
+        <Row>
+          <Col sm={24} xl={12}>
+            {data && <CountChartCard data={data.results}/>}
+          </Col>
+          <Col sm={24} xl={12}>
+            {data && <CountChartCard data={data.results}/>}
+          </Col>
+        </Row>
       </Content>
       </Layout>
     </>
