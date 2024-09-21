@@ -2,31 +2,42 @@ import axios from "axios";
 
 const API_URL = "https://api.ukhsa-dashboard.data.gov.uk";
 
-export function getCountRollingMean() {
-    return axios.get(`${API_URL}/themes/infectious_disease/sub_themes/respiratory/topics/COVID-19/geography_types/Nation/geographies/England/metrics/COVID-19_cases_countRollingMean`);
+export interface Data{
+    date: string;
+    metric_value: number;
 }
 
-/*
-Topics:
-cases cases By Day
-cases count Rolling Mean
-cases lineage Percent By Week
-cases rate Rolling Mean
-deaths ONS By Day
-deaths ONS RegBy Week
-deaths ONS Rolling Mean
-healthcare admission By Day
-healthcare admission Rolling Mean
-healthcare occupied Beds By Day
-healthcare occupied Beds Rolling Mean
-testing PCR count By Day
-testing positivity 7 Day Rolling
-vaccinations autumn22 doses By Day
-vaccinations autumn22 uptake By Day
-vaccinations autumn23 doses By Day
-vaccinations autumn23 uptake By Day
-vaccinations spring23 doses By Day
-vaccinations spring23 uptake By Day
-vaccinations spring24 doses By Day
-vaccinations spring24 uptake By Day
-*/
+export interface DataResponse<T>{
+    data: {
+        count: number;
+        results: T[];
+    };
+}
+
+export function getDeathsONSByDay(): Promise<DataResponse<Data>> {
+    return axios.get(`${API_URL}/themes/infectious_disease/sub_themes/respiratory/topics/COVID-19/geography_types/Nation/geographies/England/metrics/COVID-19_deaths_ONSRollingMean`);
+}
+
+export function getCasesByDay(): Promise<DataResponse<Data>> {
+    return axios.get(`${API_URL}/themes/infectious_disease/sub_themes/respiratory/topics/COVID-19/geography_types/Nation/geographies/England/metrics/COVID-19_cases_casesByDay`);
+}
+
+export async function getTestingPCRCount(): Promise<DataResponse<Data>> {
+    return axios.get(`${API_URL}/themes/infectious_disease/sub_themes/respiratory/topics/COVID-19/geography_types/Nation/geographies/England/metrics/COVID-19_testing_PCR_countByDay`);
+}
+
+export async function getTestesVsCases() {
+    const cases = await getCasesByDay();
+    const tests = await getTestingPCRCount();
+
+    return [
+        {
+            type: "Cases",
+            value: cases.data.results.reduce((acc: number, curr: Data) => acc+curr.metric_value, 0),
+        },
+        {
+            type: "Tests",
+            value: tests.data.results.reduce((acc: number, curr: Data) => acc+curr.metric_value, 0),
+        },
+    ];
+}

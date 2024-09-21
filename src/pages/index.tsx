@@ -1,17 +1,11 @@
 import Head from "next/head";
 import { Badge, Breadcrumb, Button, Col, Flex, Layout, Radio, Row, Typography } from 'antd';
 import { Content, Header } from "antd/es/layout/layout";
-import { getCountRollingMean } from "@/services-calls/gov-data";
-import { useQuery } from "@tanstack/react-query";
-import { CountChartCard } from "@/components/countChartCard";
+import {  DeathChartCart } from "@/components/deathChartCart";
 import { AlignLeftOutlined, DownloadOutlined, FunnelPlotOutlined } from "@ant-design/icons";
+import { CasesChartCart } from "@/components/casesChartCart";
 
 export default function Home() {
-  const { data } =  useQuery({
-    queryKey: ['countRollingMean'],
-    queryFn: () => getCountRollingMean().then((res) => res?.data),
-  })
-
   return (
     <>
       <Head>
@@ -37,10 +31,10 @@ export default function Home() {
           </div>
           <Row className="home-content-cards" justify="space-between" gutter={[25, 16]}>
             <Col sm={24} xl={12}>
-              {data && <CountChartCard data={data.results}/>}
+              <DeathChartCart/>
             </Col>
             <Col sm={24} xl={12}>
-              {data && <CountChartCard data={data.results}/>}
+              <CasesChartCart/>
             </Col>
           </Row>
         </Content>
