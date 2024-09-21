@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 import { Avatar, Button, Card } from "antd";
 import { MessageOutlined } from '@ant-design/icons';
-import { getCasesByDay, getTestesVsCases } from '@/services-calls/gov-data';
+import { getTestesVsCases } from '@/services-calls/gov-data';
 import { useQuery } from '@tanstack/react-query';
 const Pie = dynamic(() => import('@ant-design/plots').then(({ Pie }) => Pie),
     { ssr: false }

@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Badge, Breadcrumb, Button, Col, Flex, Layout, Radio, Row, Typography } from 'antd';
+import { Badge, Breadcrumb, Button, Col, Flex, Layout, Row, Typography } from 'antd';
 import { Content, Header } from "antd/es/layout/layout";
 import {  DeathChartCart } from "@/components/deathChartCart";
 import { AlignLeftOutlined, DownloadOutlined, FunnelPlotOutlined } from "@ant-design/icons";
